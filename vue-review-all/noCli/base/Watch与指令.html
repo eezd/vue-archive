@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Watch与指令</title>
+  <script src="../js/vue@next.global.js"></script>
+</head>
+<body>
+<div id="app">
+  <h2>a: {{ a }}</h2>
+  <br>
+  <h2>b: {{ b }}</h2>
+  <br>
+  <h2>c.d: {{ c.d }}</h2>
+  <br>
+  <button @click="a++">改变 a 的值</button>
+  <button @click="b++">改变 b 的值</button>
+  <button @click="c.d++">改变 c.d 的值</button>
+  <br/>
+  <hr/>
+  <br/>
+  <div v-text="str">我是不会显示的</div>
+  <div v-html="str">我是不会显示的</div>
+  <h2 v-once>初始化的a值是:{{a}}</h2>
+</div>
+<script>
+  const App = {
+    data() {
+      return {
+        a: 2,
+        b: 1,
+        c: {
+          d: 3,
+        },
+        str:'<h3>你好啊！</h3>'
+      }
+    },
+    watch: {
+      a(newValue, oldValue) {
+        console.log(newValue, '---', oldValue)
+      },
+    },
+    created() {
+      this.$watch('a', (newValue, oldValue) => {
+        console.log('a: ',newValue, '---', oldValue)
+      })
+      this.$watch(() => this.c.d, (newValue, oldValue) => {
+        console.log('this.c.d:',newValue, '---', oldValue)
+      })
+      this.$watch(() => this.a + this.b, (newValue, oldValue) => {
+        console.log('this.a + this.b:',newValue, '---', oldValue)
+      })
+
+      this.$watch('c',() => {
+        console.log('开启 deep true 更改 c 内部值')
+      }, {deep:true})
+    },
+
+  }
+  const app = Vue.createApp(App)
+  app.component('', {})
+  app.mount('#app')
+</script>
+</body>
+</html>

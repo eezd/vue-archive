@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>插槽</title>
+  <script src="../js/vue@next.global.js"></script>
+</head>
+<body>
+<div id="app">
+  <cpn3><span slot="center">标题  </span></cpn3>
+  <cpn3><span slot="left">中间  </span></cpn3>
+  <hr />
+  <br /><br /><br />
+  <cpnslot>
+    <template v-slot:default="slotProps">
+      <span>{{ slotProps.item }}</span>
+      <span>-----{{ slotProps.anotherAttribute }}</span>
+    </template>
+  </cpnslot>
+</div>
+<!--<template id="cpn">-->
+<!--  <h2>{{ chello }}</h2>-->
+<!--</template>-->
+<template id="cpn3">
+  <div>
+    <slot name="left"><span>左边</span></slot>
+    <slot name="center"><span>中间</span></slot>
+    <slot name="right"><span>右边</span></slot>
+  </div>
+</template>
+<script>
+  const App = {}
+  const app = Vue.createApp(App)
+  app.component('cpnslot', {
+    data() {
+      return {
+        items: [1, 2, 3, 4, 5],
+        anotherAttribute: 'slot-anotherAttribute',
+      }
+    },
+    template: `
+      <ul>
+      <li v-for="(item, index) in items">
+        <slot :item="item" :index="index"
+              :another-attribute="anotherAttribute"></slot>
+      </li>
+      </ul>
+    `,
+  })
+
+  app.mount('#app')
+</script>
+</body>
+</html>

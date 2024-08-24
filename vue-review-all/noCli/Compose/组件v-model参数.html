@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>组件v-model参数</title>
+  <script src="../js/vue@next.global.js"></script>
+</head>
+<body>
+<div id="app">
+  <!-- 第一步 -->
+  <user-name v-model:my-name="myName1"></user-name>
+  <p>myName: {{ myName1 }}</p>
+</div>
+<script>
+  const app = Vue.createApp({
+    data() {
+      return {
+        myName1: '123',
+      }
+    },
+  })
+  app.component('user-name', {
+    // 第二步
+    props: {
+      myName: String,
+    },
+    // 声明自定义事件
+    emits: ['update:myName'],
+    // 第三步
+    template: `
+      <input
+              type="text"
+              :value="myName"
+              @input="$emit('update:myName', $event.target.value)">
+    `,
+  })
+  app.mount('#app')
+</script>
+</body>
+</html>

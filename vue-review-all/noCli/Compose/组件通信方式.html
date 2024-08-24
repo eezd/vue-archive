@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>组件间三种数据传递的方式与插槽</title>
+  <script src="../js/vue@next.global.js"></script>
+</head>
+<body>
+<div id="app">
+  <cpn :chello="hello"></cpn>
+  <hr />
+  <br /><br /><br />
+  <cpn2 @item-click="cpn2Click"></cpn2>
+  <hr />
+  <br /><br /><br />
+  <button @click="btnClick" ref="test">refs获取</button>
+  <hr />
+  <br /><br /><br />
+  <grandfather />
+</div>
+<script>
+  const App = {
+    data() {
+      return {
+        hello: 'Hello',
+      }
+    },
+    provide: {
+      user: 'John Doe',
+    },
+    components: 'cpn3',
+    methods: {
+      // 第三步：将按钮信息发送到控制台
+      cpn2Click(item) {
+        console.log('cpnClick', item)
+      },
+      btnClick() {
+        // 2.$refs => 对象类型
+        console.log(this.$refs.test)
+      },
+    },
+  }
+  const app = Vue.createApp(App)
+  app.component('cpn', {
+    // template: '#cpn',
+    template: `
+      <h2>{{ chello }}</h2>
+    `,
+    // 创建props
+    // props: ['chello'],
+    props: {
+      // 1.类型限制
+      // cmessage: Array,
+      // chello: String,
+      // 2.提供一些默认值, 以及必传值
+      chello: {
+        type: String,
+        default: 'aaaaaaaa',
+        required: true,
+      },
+      // 类型是对象或者数组时, 默认值必须是一个函数
+      cmessage: {
+        type: Array,
+        default() {
+          return []
+        },
+      },
+    },
+  })
+
+  app.component('cpn2', {
+    template: `
+      <button @click="btnClick">子传父</button>
+    `,
+    methods: {
+      btnClick(event) {
+        // 第一步：发射自定义事件
+        this.$emit('item-click', event)
+      },
+    },
+  })
+
+  app.component('grandfather', {
+    data(){
+      return{
+        num: 10
+      }
+    },
+    provide: {
+      data: 'John Doe',
+    },
+    // provide() {
+    //   return {
+    //     user: this.num,
+    //   }
+    // },
+    // provide() {
+    //   return {
+    //     user: Vue.computed(() => this.num),
+    //   }
+    // },
+    template: `
+      <button @click="num++">+</button>
+      <father />`,
+    components: {
+      'father': {
+        template: `
+          <son />`,
+        components: {
+          'son': {
+            inject: ['user'],
+            template: `
+            son：{{user}}
+            `,
+          },
+        },
+      },
+    },
+  })
+
+  app.mount('#app')
+</script>
+</body>
+</html>

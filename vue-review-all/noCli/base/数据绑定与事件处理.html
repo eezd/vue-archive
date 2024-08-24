@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>数据绑定</title>
+  <script src="../js/vue@next.global.js"></script>
+</head>
+<body>
+<style>
+  .active {
+    color: red;
+  }
+</style>
+<div id="app">
+  <h2 :class="active">Hello World 1</h2>
+  <h2 :class="['active', 'line']">Hello World 2</h2>
+  <!-- 通过控制 yesActive 选择是否显示样式 -->
+  <h2 :class="{active: yesActive}">{{ message }}</h2>
+  <hr />
+  <h2 :style="[myColor, mySize]">Hello</h2>
+  <div :style="{ fontSize: size + 'px'}">我的大小为30</div>
+  <br />
+  <br />
+  <button @click="btn2Click(message, $event)">按钮3</button>
+  <br />
+  <br />
+  <hr />
+  <input :value="message" type="text" @input="message = $event.target.value">
+  <br />
+  <br />
+  <input v-model="message" type="text">
+  <br />
+  <br />
+  Male：<input v-model="pick" type="radio" value="Male" />
+  <br />
+  Female：<input v-model="pick" type="radio" value="Female" />
+  {{ pick }}
+</div>
+
+
+<script>
+  const App = {
+    data() {
+      return {
+        active: "active",
+        yesActive: true,
+        message: "my message",
+        size: 30,
+        myColor: {
+          color: "red"
+        },
+        mySize: {
+          fontSize: "30px"
+        },
+        pick: ""
+      };
+    },
+    methods: {
+      btn2Click(message, event) {
+        console.log("按钮2被点击了", message, event);
+      }
+    }
+  };
+  const app = Vue.createApp(App);
+  app.mount("#app");
+</script>
+</body>
+</html>

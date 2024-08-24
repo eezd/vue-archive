@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>插槽</title>
+  <script src="../js/vue@next.global.js"></script>
+</head>
+<body>
+<style>
+  .my-class {
+    color: red
+  }
+</style>
+<div id="app">
+  <grandfather />
+</div>
+<script>
+  const App = {};
+  const app = Vue.createApp(App);
+  app.component("grandfather", {
+    // inheritAttrs: false,
+    data() {
+      return {
+        test: "test"
+      };
+    },
+    methods: {
+      show() {
+        console.log("1111");
+      }
+    },
+    template: `
+      <div>
+      <h2>grandfather</h2>
+      <father :myData="test" class="my-class" id="custom-layout"
+              @click="show"></father>
+      </div>
+    `,
+    // father组件
+    components: {
+      father: {
+        inheritAttrs: false,
+        template: `
+          <div>
+          <h2 v-bind="$attrs">father</h2>
+          <p>$attrs: {{ $attrs }}</p>
+          <p>$props：{{ $props }}</p>
+
+          <child v-bind="$attrs"></child>
+          </div>
+        `,
+        // child组件
+        components: {
+          child: {
+            props: ["myData"],
+            template: `
+              <div>
+              <h2>child</h2>
+              <p>{{ myData }}</p>
+              </div>
+            `
+          }
+        }
+      }
+    }
+  });
+
+  app.mount("#app");
+</script>
+</body>
+</html>

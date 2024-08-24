@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>条件与列表渲染与Key的作用</title>
+  <script src="../js/vue@next.global.js"></script>
+</head>
+<body>
+<div id="app">
+  <h2 v-if="vif">v-if测试</h2>
+  <h2 v-if="velseif">v-else-if测试</h2>
+  <h2 v-else>v-else测试-------</h2>
+  <button @click="vif = !vif">v-if切换</button>
+  <button @click="velseif = !velseif">v-else-if切换</button>
+  <h2 v-show="vshow">v-show</h2>
+  <br />
+  <button @click="vshow = !vshow">v-show切换</button>
+  <hr />
+  <br />
+  <ul>
+    <h3>数组遍历，value</h3>
+    <li v-for="value in arr">{{ value }}</li>
+    <br />
+    <h3>数组遍历，键值</h3>
+    <li v-for="(value, index) in arr">{{ value }}---{{ index }}</li>
+    <br />
+    <h3>对象遍历，值键</h3>
+    <li v-for="(value, key) in object">{{ value }}---{{ key }}</li>
+    <br />
+    <h3>对象遍历，值键索引</h3>
+    <li v-for="(value, key, index) in object">
+      {{ value }}---{{ key }}---{{ index }}
+    </li>
+    <br />
+    <h3>字符串遍历，值索引</h3>
+    <li v-for="(char, index) in string">{{ char }}---{{ index }}</li>
+  </ul>
+  <hr />
+  <h2>返回能被2整除</h2>
+  <ul>
+    <li v-for="n in evenNumbers" :key="n">{{ n }}</li>
+  </ul>
+
+</div>
+<script>
+  const App = {
+    data() {
+      return {
+        vif: true,
+        velseif: true,
+        vshow: true,
+        arr: ['one', 'two', 'first'],
+        object: {
+          '一': 'one',
+          '二': 'two',
+          '三': 'first',
+        },
+        string: 'Hello',
+        numbers: [1, 2, 3, 4, 5, 6],
+      }
+    },
+    computed: {
+      evenNumbers() {
+        return this.numbers.filter(number => number % 2 === 0)
+      },
+    },
+  }
+  const app = Vue.createApp(App)
+  app.component('', {})
+  app.mount('#app')
+</script>
+</body>
+</html>
